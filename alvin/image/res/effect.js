@@ -15,6 +15,6 @@ function print(index, max) {
     }
 
     setTimeout(function() {
-        print(index + 1, max);
-    }, 500);
+        print(index + 1, len);
+    }, 300);
 }
