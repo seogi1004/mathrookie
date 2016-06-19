@@ -1,5 +1,5 @@
-from util.vec import Vec
-from util.mat import Mat
+from alvin.util.vec import Vec
+from alvin.util.mat import Mat
 
 def identity(D, one):
   """Given a set D and the field's one, returns the DxD identity matrix

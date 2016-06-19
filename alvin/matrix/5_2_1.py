@@ -1,6 +1,6 @@
-from util.vec import Vec
-from util.mat import Mat
-from util.matutil import rowdict2mat
+from alvin.util.vec import Vec
+from alvin.util.mat import Mat
+from alvin.util.matutil import rowdict2mat
 
 # Example 5.5.10
 D = { 'metal', 'concrete', 'plastic', 'water', 'electricity' }

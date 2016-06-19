@@ -1,6 +1,6 @@
-from util.vec import Vec
-from util.mat import Mat
-from util.matutil import listlist2mat
+from alvin.util.vec import Vec
+from alvin.util.mat import Mat
+from alvin.util.matutil import listlist2mat
 
 # Quiz 5.1.1
 r1 = [ [ 0 for j in range(4) ] for i in range(3) ]
