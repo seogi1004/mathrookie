@@ -1,37 +1,16 @@
-# version code 7bdbe7c95e85+
-coursera = 1
-# Please fill out this stencil and submit using the provided submission script.
-
-import sys, os, re
-sys.path.append("../util")
-sys.path.append(re.sub('week\d$', 'lib', os.getcwd()))
-
 from alvin.util.vec import Vec
 from alvin.util.mat import Mat
-from alvin.util.matutil import rowdict2mat, mat2coldict, coldict2mat, mat2rowdict
+from alvin.util.matutil import rowdict2mat
 from alvin.util.image_mat_util import file2mat, mat2display
 from alvin.util.solve import solve
 
 
-## 1: (Task 5.12.1) Move To Board
-def move2board(v):
-    '''
-    Input:
-        - y: a Vec with domain {'y1','y2','y3'}, the coordinate representation in whiteboard coordinates of a point q
-    Output:
-        - A {'y1','y2','y3'}-Vec, the coordinate representation
-          in whiteboard coordinates of the point p such that the line through the
-          origin and q intersects the whiteboard plane at p.
-    '''
-    return Vec({'y1','y2','y3'}, {k:v[k]/v['y3'] for k in v.D})
-
-
-## 2: () Make domain of vector
+## 1: () Make domain of vector
 # D should be assigned the Cartesian product of R and C
 D = {(a, b) for a in {'y1', 'y2', 'y3'} for b in {'x1', 'x2', 'x3'}}
 
 
-## 3: (Task 5.12.2) Make Equations
+## 2: (Task 5.12.2) Make Equations
 def make_equations(x1, x2, w1, w2):
     '''
     Input:
@@ -81,19 +60,18 @@ def make_equations(x1, x2, w1, w2):
     return [u, v]
 
 
-
-## 4: () Scaling row
+## 3: () Scaling row
 # This is the vector defining the scaling equation
 w = Vec({(a, b) for a in {'y1', 'y2', 'y3'} for b in {'x1', 'x2', 'x3'}}, {('y1', 'x1'): 1})
 
 
-## 5: () Right-hand side
+## 4: () Right-hand side
 # Now construct the Vec b that serves as the right-hand side for the matrix-vector equation L*hvec=b
 # This is the {0, ..., 8}-Vec whose entries are all zero except for a 1 in position 8
 b = Vec({x for x in range(9)}, {x: 0 if x != 8 else 1 for x in range(9)})
 
 
-## 6: () Rows of constraint matrix
+## 5: () Rows of constraint matrix
 def make_nine_equations(corners):
     '''
     input: a list of four tuples:
@@ -116,7 +94,7 @@ def make_nine_equations(corners):
     return [y for x in veclist for y in x] + [w]
 
 
-## 7: (Task 5.12.4) Build linear system
+## 6: (Task 5.12.4) Build linear system
 # Apply make_nine_equations to the list of tuples specifying the pixel coordinates of the
 # whiteboard corners in the image.  Assign the resulting list of nine vectors to veclist:
 veclist = make_nine_equations([(358, 36), (329, 597), (592, 157), (580, 483)])
@@ -125,16 +103,13 @@ veclist = make_nine_equations([(358, 36), (329, 597), (592, 157), (580, 483)])
 L = rowdict2mat(veclist)
 
 
-## 8: () Solve linear system
+## 7: () Solve linear system
 # Now solve the matrix-vector equation to get a Vec hvec, and turn it into a matrix H.
 hvec = solve(L, b)
-
 H = Mat(({'y1', 'y2', 'y3'}, {'x1', 'x2', 'x3'}), {val: hvec[val] for val in hvec.f})
 
-print(H.D)
 
-
-## 9: (Task 5.12.7) Y Board Comprehension
+## 8: (Task 5.12.7) Y Board Comprehension
 def mat_move2board(Y):
     values = {}
 
@@ -146,6 +121,7 @@ def mat_move2board(Y):
                 values[row, col] = 1
 
     return Mat((Y.D[1], Y.D[0]), values)
+
 
 (X_pts, colors) = file2mat('board.png', ('x1', 'x2', 'x3'))
 Y_pts = H * X_pts
