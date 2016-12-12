@@ -12,8 +12,7 @@
     """
 
 from alvin.util.mat import Mat
-from alvin.util.png import Reader
-from alvin.util.png import Writer
+from alvin.util.png import Reader, Writer
 
 import numbers
 import collections
@@ -274,85 +273,6 @@ def mat2display(pts, colors, row_labels = ('x', 'y', 'u'),
                 '<circle cx="0" cy="0" r="50" style="stroke: black; fill: none;" />\n'])
 
         h.writelines(['</g></svg>\n', '</body>\n', '</html>\n'])
-
-    openinbrowser('file://%s' % hpath, browser)
-    print("Hit Enter once the image is displayed.... ", end="")
-    input()
-
-def mat2svg(pts, colors, row_labels=('x', 'y', 'u'),
-                scale=1, xscale=None, yscale=None, xmin=0, ymin=0, xmax=None, ymax=None,
-                crosshairs=False, browser=None):
-
-    if xscale == None: xscale = scale
-    if yscale == None: yscale = scale
-
-    rx, ry, ru = row_labels
-
-    if ymin is None:
-        ymin = min(v for (k, v) in pts.f.items() if k[0] == ry)
-    if xmin is None:
-        xmin = min(v for (k, v) in pts.f.items() if k[0] == rx)
-    if ymax is None:
-        ymax = max(v for (k, v) in pts.f.items() if k[0] == ry)
-    if xmax is None:
-        xmax = max(v for (k, v) in pts.f.items() if k[0] == rx)
-
-    h = []
-
-    h.append(
-        '<svg style="display: none;" height="%s" width="%s" xmlns="http://www.w3.org/2000/svg">\n' % (
-         (ymax - ymin) * yscale, (xmax - xmin) * xscale) +
-         '<g transform="scale(%s) translate(%s, %s) ">\n' % (scale, -xmin, -ymin))
-
-    pixels = sorted(colors.D[1])
-    Mx, My = pixels[-1]
-
-    # go through the quads, writing each one to canvas
-    for l in pixels:
-        lx, ly = l
-        r = _color_int(colors[('r', l)])
-        g = _color_int(colors[('g', l)])
-        b = _color_int(colors[('b', l)])
-
-        mx = min(lx + 1, Mx) + 1
-        my = min(ly + 1, My) + 1
-
-        # coords of corners
-        x0 = pts[(rx, l)]
-        y0 = pts[(ry, l)]
-        x1 = pts[(rx, (mx, ly))]
-        y1 = pts[(ry, (mx, ly))]
-        x2 = pts[(rx, (mx, my))]
-        y2 = pts[(ry, (mx, my))]
-        x3 = pts[(rx, (lx, my))]
-        y3 = pts[(ry, (lx, my))]
-
-        h.append('<polygon points="%s, %s %s, %s, %s, %s %s, %s" fill="rgb(%s, %s, %s)" stroke="none" />\n'
-                      % (x0, y0, x1, y1, x2, y2, x3, y3, r, g, b))
-
-    h.append('</g></svg>\n')
-
-    return "".join(h)
-
-def svglist2display(list, scriptPath, browser=None):
-    hpath = _create_temp('.html')
-    script = open(scriptPath, 'r').read()
-
-    with open(hpath, 'w') as h:
-        h.writelines(
-            ['<!DOCTYPE html>\n',
-             '<head>\n',
-             '<script>\n',
-             script,
-             '</script>\n',
-             '</head>\n',
-             '<body>\n',
-             ])
-
-        for svg in list:
-            h.writelines(mat2svg(svg[0], svg[1]))
-
-        h.writelines(['</body>\n', '</html>\n'])
 
     openinbrowser('file://%s' % hpath, browser)
     print("Hit Enter once the image is displayed.... ", end="")
