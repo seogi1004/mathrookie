@@ -7,6 +7,7 @@ import doctest
 from alvin.util.vecutil import list2vec
 from alvin.util.vec import Vec
 from alvin.util.matutil import listlist2mat
+from alvin.util.matutil import coldict2mat
 
 
 def _solve(a, b):
@@ -76,3 +77,26 @@ def solve(a, b):
     solution = _solve(mat_list, vec_list)[0]
 
     return Vec(set(D), {D[i]: solution[i] for i in range(len(D))})
+
+
+def solve2(a, b):
+    mat_list = []
+    vec_list = []
+    D = list(a.D[1])
+
+    for r in a.D[0]:
+        row_list = []
+        for c in a.D[1]:
+            row_list.append(a[r, c])
+        mat_list.append(row_list)
+
+    for r in b.D[0]:
+        row_list = []
+        for c in a.D[1]:
+            row_list.append(b[r, c])
+        vec_list.append(row_list)
+
+    solution = _solve(mat_list, vec_list)[0]
+    L = [list2vec(v) for v in solution]
+
+    return coldict2mat(L)

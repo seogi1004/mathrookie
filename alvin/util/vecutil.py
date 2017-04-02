@@ -14,3 +14,7 @@ def zero_vec(D):
     """Returns a zero vector with the given domain
     """
     return Vec(D, {})
+
+def vec2list(v, keys, i):
+    keys.pop(i)
+    return [ v[k] for k in keys ]
