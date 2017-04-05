@@ -13,10 +13,11 @@
     jui.define("test.data.circle", [ "chart.vector" ], function(Vector) {
         var data1 = [],
             data2 = [],
-            data3 = [];
+            data3 = [],
+            zero = 0.001;
 
-        for(var x = -7; x < 7; x+=0.001) {
-            for(var y = -7; y < 7; y+=0.001) {
+        for(var x = -7; x < 7; x+=zero) {
+            for(var y = -7; y < 7; y+=zero) {
                 /*
                 1. 지나는점 (-2,2)과 (4,-6), (5,-5)를 알고 있을 때, 원의 방정식을 구하시오
                     -2^2 + 2^2 + -2a + 2b + 1c = 0
@@ -45,7 +46,7 @@
                 var v = Math.pow(x, 2) + Math.pow(y, 2) - (2 * x) + (4 * y) - 20,
                     v2 = Math.pow(x, 2) + Math.pow(y, 2) - 25;
 
-                if(v > 0.0001 && v < 0.001) {
+                if(v >= -zero && v <= zero) {
                     data1.push({
                         x: x,
                         y: y,
@@ -54,7 +55,7 @@
                     });
                 }
 
-                if(v2 > 0.0001 && v2 < 0.001) {
+                if(v2 >= -zero && v2 <= zero) {
                     data2.push({
                         x: x,
                         y: y,

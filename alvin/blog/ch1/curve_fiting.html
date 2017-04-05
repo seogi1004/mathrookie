@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../jui/core.js"></script>
+    <script src="../jui/chart.js"></script>
+    <script src="../jui/redefine.js"></script>
+</head>
+<body>
+<div id="result"></div>
+<script>
+    jui.define("test.data", [ "chart.vector" ], function(Vector) {
+        var data1 = [],
+            data2 = [];
+
+        /*
+        (n - 1)차의 다항식
+        y = a + bx + cx^2 + dx^n-1
+         */
+
+        for(var i = -7; i <= 7; i+=0.01) {
+
+            // 4개의 점
+            data1.push({
+                x: i,
+                y: 4 + (3*i) - (5*Math.pow(i, 2)) + Math.pow(i, 3),
+                z: 1,
+                color: "red"
+            });
+
+            // 3개의 점
+            data2.push({
+                x: i,
+                y: 10 - (8*i) + Math.pow(i, 2),
+                z: 1,
+                color: "orange"
+            });
+        }
+
+        return {
+            data1: data1,
+            data2: data2,
+            data3: [
+                { x: 1, y: 3, z: 1, color: "blue" },
+                { x: 2, y: -2, z: 1, color: "blue" },
+                { x: 3, y: -5, z: 1, color: "blue" },
+                { x: 4, y: 0, z: 1, color: "blue" },
+            ]
+        };
+    });
+
+    jui.ready([ "chart.builder", "test.data" ], function(Builder, Obj) {
+        var chart = Builder("#result", {
+            padding : 200,
+            width : 800,
+            height : 800,
+            axis : [{
+                x : {
+                  type : "range",
+                  domain : [ -7, 7 ],
+                  line : "solid"
+                },
+                y : {
+                  type : "range",
+                  domain : [ -7, 7 ],
+                  line : "solid"
+                },
+                z : {
+                  type : "range",
+                  domain : [ -7, 7 ],
+                },
+                depth : 400,
+                degree : {
+                  x : 0,
+                  y : 0
+                },
+                perspective : 1,
+                data : Obj.data1
+            }, {
+                extend : 0,
+                data : Obj.data2
+            }, {
+                extend : 0,
+                data : Obj.data3
+            }],
+            brush : [{
+                type : "polygon.scatter3d",
+                size : 1,
+                axis : 0
+            }, {
+                type : "polygon.scatter3d",
+                size : 1,
+                axis : 1
+            }, {
+                type : "polygon.scatter3d",
+                size : 3,
+                axis : 2
+            }],
+            widget : [{
+                type : "polygon.rotate3d",
+                axis : [ 0 ]
+            }]
+        });
+    });
+</script>
+</body>
+</html>

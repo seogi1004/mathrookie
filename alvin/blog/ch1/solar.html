@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../jui/core.js"></script>
+    <script src="../jui/chart.js"></script>
+    <script src="../jui/redefine.js"></script>
+</head>
+<body>
+<div id="result"></div>
+<script>
+
+    jui.define("test.data.circle", [ "chart.vector" ], function(Vector) {
+        var data1 = [],
+            zero = 0.001,
+            range = 20;
+
+        var a = 1,
+            b = -0.285107212018,
+            c = 1.1742917544,
+            d = -6.06171034862,
+            e = -3.60847194582,
+            f = -47.8480342193;
+
+        for(var x = -range; x < range; x+=zero) {
+            for(var y = -range; y < range; y+=zero) {
+                var v1 = a * Math.pow(x, 2),
+                    v2 = b * (x * y),
+                    v3 = c * Math.pow(y, 2),
+                    v4 = d * x,
+                    v5 = e * y,
+                    v6 = f;
+
+                var v = v1 + v2 + v3 + v4 + v5 + v6;
+
+                if(v >= -zero && v <= zero) {
+                    data1.push({
+                        x: x,
+                        y: y,
+                        z: 1,
+                        color: "red"
+                    });
+                }
+            }
+        }
+
+        return {
+            data1: data1
+        };
+    });
+
+    jui.ready([ "chart.builder", "test.data.circle" ], function(Builder, Obj) {
+        var chart = Builder("#result", {
+            padding : 200,
+            width : 800,
+            height : 800,
+            axis : [{
+                x : {
+                  type : "range",
+                  domain : [ -20, 20 ],
+                  line : "solid"
+                },
+                y : {
+                  type : "range",
+                  domain : [ -20, 20 ],
+                  line : "solid"
+                },
+                z : {
+                  type : "range",
+                  domain : [ -20, 20 ]
+                },
+                depth : 400,
+                degree : {
+                  x : 0,
+                  y : 0
+                },
+                perspective : 1,
+                data : Obj.data1
+            }],
+            brush : [{
+                type : "polygon.scatter3d",
+                size : 1,
+                axis : 0
+            }],
+            widget : [{
+                type : "polygon.rotate3d",
+                axis : [ 0 ]
+            }]
+        });
+    });
+</script>
+</body>
+</html>
