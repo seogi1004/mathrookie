@@ -36,6 +36,7 @@ def echelon_form(rowlist):
     return new_M_rowlist, new_rowlist
 
 A = [list2vec(v) for v in [[0,2,3,4,5], [0,0,0,3,2], [1,2,3,4,5], [0,0,0,6,7], [0,0,0,9,8]]]
+print(A)
 M,MA = echelon_form(A)
 print(rowdict2mat(M))
 print(rowdict2mat(MA))

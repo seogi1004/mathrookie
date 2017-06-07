@@ -164,7 +164,7 @@ def find_triangular_matrix_inverse(M):
 M0 = [list2vec(v) for v in [[1,0.5,0.2,4], [0,1,0.3,0.9], [0,0,1,0.1], [0,0,0,1]]]
 MM = coldict2mat(M0)
 RM = find_triangular_matrix_inverse(MM)
-print(RM)
+# print(RM)
 RM2 = find_matrix_inverse(MM)
 
 
