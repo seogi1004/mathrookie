@@ -17,14 +17,17 @@ train = optimizer.minimize(cost)
 sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 
-for step in range(2001):
+for step in range(5):
     cost_val, W_val, b_val, _ = sess.run([ cost, W, b, train ],
-                                         feed_dict={ X: [ 1, 2, 3, 4, 5 ], Y: [ 2.1, 3.1, 4.1, 5.1, 6.1 ] })
+                                         feed_dict={ X: [ 1, 2, 3 ], Y: [ 1, 2, 3 ] })
     # if step % 20 == 0:
-    #     print(step, cost_val, W_val, b_val)
+    print(step, cost_val, W_val, b_val)
 
 # Test
 print(sess.run(hypothesis, feed_dict={ X: [ 5 ] }))
 print(sess.run(hypothesis, feed_dict={ X: [ 2.5 ] }))
 print(sess.run(hypothesis, feed_dict={ X: [ 1.5, 3.5 ] }))
 print(sess.run(hypothesis, feed_dict={ X: [ 6, 7, 8, 9, 10 ] }))
+
+print("\n")
+print(sess.run(tf.random_normal([1])))
