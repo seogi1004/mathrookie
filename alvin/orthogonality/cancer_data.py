@@ -26,5 +26,8 @@ def read_training_data(fname, D=None):
         row = line.split(",")
         patient_ID = int(row[0])
         patient_diagnoses[patient_ID] = -1 if row[1]=='B' else +1
-        feature_vectors[patient_ID] = Vec(D, {f:float(row[feature_map[f]+2]) for f in D})
+
+        tmp_Vec = Vec(D, {f:float(row[feature_map[f]+2]) for f in D})
+        feature_vectors[patient_ID] = tmp_Vec.normalize()
+
     return rowdict2mat(feature_vectors), Vec(set(patient_diagnoses.keys()), patient_diagnoses)

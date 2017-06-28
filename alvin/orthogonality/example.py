@@ -1,9 +1,8 @@
-from alvin.util.vecutil import list2vec
 from alvin.util.matutil import mat2rowdict
-from alvin.util.matutil import coldict2mat
+from alvin.util.matutil import mat2coldict
 from alvin.orthogonality.cancer_data import read_training_data
 from alvin.util.vec import Vec
-from math import sqrt
+import random
 
 def project_along(b, v):
     sigma = ((b*v)/(v*v)) if v*v > 1e-20 else 0
@@ -121,6 +120,17 @@ def find_grad(A, b, w):
     '''
     return 2 * (A * w - b) * A
 
+def find_grad2(A, b, w):
+    '''
+    Input:
+        - A: feature Mat
+        - b: diagnoses Vec
+        - w: hypothesis Vec
+    Output:
+        - Value of the gradient function at w
+    '''
+    return (A * w - b) * A / len(A.D[0])
+
 ## Task 5 ##
 def gradient_descent_step(A, b, w, sigma):
     '''
@@ -133,7 +143,7 @@ def gradient_descent_step(A, b, w, sigma):
         - The vector w' resulting from 1 iteration of gradient descent
           starting from w and moving sigma.
     '''
-    return w - sigma*find_grad(A, b, w)
+    return w - sigma*find_grad2(A, b, w)
 
 ### test gradient_descent_step
 ##A1 = listlist2mat([[10, 7, 11, 10, 14], [1, 1, 13, 3, 2], [6, 13, 3, 2, 6], [10, 10, 12, 1, 2], [2, 1, 5, 7, 10]])
@@ -166,16 +176,19 @@ def gradient_descent(A, b, w, sigma, T):
         w = gradient_descent_step(A, b, w, sigma)
         T -= 1
         if _T - T == 60:
-            print('Loss = ' + str(loss(A,b,w)))
+            cost = loss(A,b,w)
+            print('Loss = ' + str(cost))
             print(' Fraction Wrong = ' + str(fraction_wrong(A,b,w)))
             _T = T
+            if cost < 0.1:
+                break
     return w
 
 
 
-list = [ list2vec(v) for v in [[6,2], [2,4]] ]
-v = list[0]
-b = list[1]
+# list = [ list2vec(v) for v in [[6,2], [2,4]] ]
+# v = list[0]
+# b = list[1]
 
 # print(project_along(b, v))
 # print(project_orthogonal_1(b, v))
@@ -183,17 +196,22 @@ b = list[1]
 res = read_training_data("train.data")
 A = res[0]
 b = res[1]
-
-# print(A)
-u = Vec({ "A", "B" }, { "A":3, "B":-2 })
-# print(signum(u))
-
 tmp_rows = mat2rowdict(A)
 w = tmp_rows[852631]
-sigma = (10 ** -9)
-T  = 1000
+sigma = (10 ** -2)
+T = 10000
 
 for k in w.D:
-    w[k] = 0
+    w[k] = random.uniform(-5, 5)
 
-print(gradient_descent(A, b, w, sigma, T))
+# train.data로 학습시킨 결과
+w2 = gradient_descent(A, b, w, sigma, T)
+
+res2 = read_training_data("validate.data")
+A2 = res2[0]
+b2 = res2[1]
+
+print("start -----------------------------------------\n")
+print(b2)
+print(A2 * w2)
+print("\nend -----------------------------------------\n")

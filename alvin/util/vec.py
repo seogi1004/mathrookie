@@ -1,5 +1,5 @@
 # Copyright 2013 Philip N. Klein
-
+import math
 
 def getitem(v,k):
     """
@@ -489,3 +489,12 @@ class Vec:
 
     def __iter__(self):
         raise TypeError('%r object is not iterable' % self.__class__.__name__)
+
+    def normalize(self):
+        total = 0
+
+        for k, v in self.f.items():
+            total += v*v
+
+        length = math.sqrt(total)
+        return Vec(self.D, {k: v / length for k, v in self.f.items()})
