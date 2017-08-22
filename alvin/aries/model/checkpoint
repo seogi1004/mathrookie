@@ -1,0 +1,2 @@
+model_checkpoint_path: "cpu_softmax.ckpt"
+all_model_checkpoint_paths: "cpu_softmax.ckpt"
