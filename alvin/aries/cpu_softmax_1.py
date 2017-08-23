@@ -1,5 +1,5 @@
 import tensorflow as tf
-from alvin.aries.cpu_utility import createMatrixData
+from alvin.aries.cpu_utility import get_matrix_data
 
 l_rate = 0.001
 d_rate = 0.5
@@ -10,8 +10,8 @@ h_layer_2 = 20
 nb_classes = 100
 model_path = "cpu_softmax.ckpt"
 
-trainData = createMatrixData("data/cpu_train.csv", nb_classes)
-testData = createMatrixData("data/cpu_test.csv", nb_classes)
+trainData = get_matrix_data("data/cpu_train.csv", nb_classes)
+testData = get_matrix_data("data/cpu_test.csv", nb_classes)
 
 x_data = trainData[0]
 y_data = trainData[1]

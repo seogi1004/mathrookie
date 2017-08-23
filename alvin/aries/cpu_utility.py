@@ -4,6 +4,12 @@ import datetime
 import tensorflow as tf
 from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
+def data_normalization(xdata):
+    return (xdata - xdata.min()) / (xdata.max() - xdata.min())
+
+def data_standardization(xdata):
+    return (xdata - xdata.mean()) / xdata.std()
+
 def one_hot_encode(x, n_classes):
     """
     One hot encode a list of sample labels. Return a one-hot encoded vector for each label.
@@ -12,7 +18,7 @@ def one_hot_encode(x, n_classes):
      """
     return np.eye(n_classes)[x]
 
-def createMatrixData(fileName, nb_classes):
+def get_matrix_data(fileName, nb_classes):
     data = pd.read_csv(fileName)
     count = len(data["시간"])
 
@@ -46,12 +52,6 @@ def createMatrixData(fileName, nb_classes):
     xdata = data[xcols]
     ydata = data[ycols]
 
-    # normalization
-    xdata = (xdata - xdata.min()) / (xdata.max() - xdata.min())
-
-    # standardization
-    # xdata = (xdata - xdata.mean()) / xdata.std()
-
     x_data = xdata.as_matrix()
     y_data = ydata.as_matrix()
     one_hot_data = []
@@ -63,7 +63,7 @@ def createMatrixData(fileName, nb_classes):
 
     return x_data, np.array(one_hot_data)
 
-def createOriginalMatrixData(fileName):
+def get_original_matrix_data(fileName):
     data = pd.read_csv(fileName)
     count = len(data["시간"])
 
@@ -85,20 +85,14 @@ def createOriginalMatrixData(fileName):
     xdata = data[xcols]
     ydata = data[ycols]
 
-    # normalization
-    xdata = (xdata - xdata.min()) / (xdata.max() - xdata.min())
-
-    # standardization
-    # xdata = (xdata - xdata.mean()) / xdata.std()
-
     x_data = xdata.as_matrix()
     y_data = ydata.as_matrix()
 
     return x_data, y_data
 
-def createMergedMatrixData(todayName, yesterdayName):
-    today_data = createOriginalMatrixData(todayName)
-    yesterday_data = createOriginalMatrixData(yesterdayName)
+def get_merged_matrix_data(todayName, yesterdayName):
+    today_data = get_original_matrix_data(todayName)
+    yesterday_data = get_original_matrix_data(yesterdayName)
     count = len(today_data[0])
 
     for i in range(count):

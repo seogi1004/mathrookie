@@ -1,10 +1,10 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
-from alvin.aries.cpu_utility import createMergedMatrixData
+from alvin.aries.cpu_utility import get_merged_matrix_data
 
 # 입력 데이터 가져오기
-merged_data = createMergedMatrixData("data/cpu_today.csv", "data/cpu_yesterday.csv")
+merged_data = get_merged_matrix_data("data/cpu_today.csv", "data/cpu_yesterday.csv")
 merged_data_x = merged_data[0]
 merged_data_y = merged_data[1]
 
