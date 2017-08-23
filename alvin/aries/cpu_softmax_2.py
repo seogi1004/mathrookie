@@ -1,11 +1,12 @@
 import tensorflow as tf
 from alvin.aries.cpu_utility import createMatrixData
 
-nb_classes = 20
+nb_classes = 100
 x_classes = 6
+model_path = "cpu_softmax.ckpt"
 
 trainData = createMatrixData("data/cpu_train.csv", nb_classes)
-testData = createMatrixData("data/cpu_test_2.csv", nb_classes)
+testData = createMatrixData("data/cpu_test.csv", nb_classes)
 
 x_data = trainData[0]
 y_data = trainData[1]
@@ -13,10 +14,10 @@ y_data = trainData[1]
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
-    saver = tf.train.import_meta_graph('model/cpu_softmax.ckpt.meta')
-    saver.restore(sess, tf.train.latest_checkpoint('model/'))
+    saver = tf.train.import_meta_graph("model/" + model_path + ".meta")
+    saver.restore(sess, tf.train.latest_checkpoint("model/"))
 
-    inputs = tf.get_collection('input')
+    inputs = tf.get_collection("input")
     X = inputs[0]
     Y = inputs[1]
     dropout_rate = inputs[2]
@@ -36,4 +37,4 @@ with tf.Session() as sess:
 
     # Test model and check accuracy
     print('Accuracy:', sess.run(accuracy, feed_dict={X: testData[0], Y: testData[1], dropout_rate: 1}))
-    saver_path = saver.save(sess, "model/cpu_softmax.ckpt")
+    saver_path = saver.save(sess, "model/" + model_path)

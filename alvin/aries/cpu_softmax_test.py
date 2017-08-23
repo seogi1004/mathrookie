@@ -11,7 +11,7 @@ merged_data_y = merged_data[1]
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
-    saver = tf.train.import_meta_graph('model/cpu_softmax.ckpt.meta')
+    saver = tf.train.import_meta_graph('model/cpu_softmax2.ckpt.meta')
     saver.restore(sess, tf.train.latest_checkpoint('model/'))
 
     inputs = tf.get_collection('input')

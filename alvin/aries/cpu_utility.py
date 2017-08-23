@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import datetime
-import math
 
 def one_hot_encode(x, n_classes):
     """
@@ -25,7 +24,7 @@ def createMatrixData(fileName, nb_classes):
         minutes.append(dateObj.minute)
 
         cpu = data["프로세스 CPU사용률 (%)"][i]
-        level = math.floor(cpu / 5)
+        level = int(round(cpu))
         if(level >= nb_classes):
             level = nb_classes - 1
 
@@ -38,6 +37,9 @@ def createMatrixData(fileName, nb_classes):
     cols = data.columns.tolist()
     xcols = cols[-2:] + cols[1:-4]
     ycols = cols[-3]
+
+    print(xcols)
+    print(ycols)
 
     xdata = data[xcols]
     ydata = data[ycols]
