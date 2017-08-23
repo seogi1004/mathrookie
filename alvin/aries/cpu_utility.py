@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 import datetime
+import tensorflow as tf
+from tensorflow.contrib.layers.python.layers import batch_norm as batch_norm
 
 def one_hot_encode(x, n_classes):
     """
@@ -113,3 +115,12 @@ def createMergedMatrixData(todayName, yesterdayName):
             # today_y[i] = yesterday_y[i]
 
     return today_data[0], today_data[1]
+
+def batch_norm_layer(inputT, is_training=True, scope=None):
+    # Note: is_training is tf.placeholder(tf.bool) type
+    return tf.cond(is_training,
+                   lambda: batch_norm(inputT, is_training=True, center=True, scale=True, activation_fn=tf.nn.relu, decay=0.9, scope=scope),
+                   lambda: batch_norm(inputT, is_training=False, center=True, scale=True, activation_fn=tf.nn.relu, decay=0.9, scope=scope, reuse=True))
+
+
+
