@@ -117,4 +117,38 @@ def batch_norm_layer(inputT, is_training=True, scope=None):
                    lambda: batch_norm(inputT, is_training=False, center=True, scale=True, activation_fn=tf.nn.relu, decay=0.9, scope=scope, reuse=True))
 
 
+def generate_batch_data(image, label, min_queue_examples, batch_size, shuffle):
+    """Construct a queued batch of images and labels.
+
+    Args:
+        image: 3-D Tensor of [height, width, 3] of type.float32.
+        label: 1-D Tensor of type.int32
+        min_queue_examples: int32, minimum number of samples to retain
+          in the queue that provides of batches of examples.
+        batch_size: Number of images per batch.
+        shuffle: boolean indicating whether to use a shuffling queue.
+
+    Returns:
+        images: Images. 4D tensor of [batch_size, height, width, 3] size.
+        labels: Labels. 1D tensor of [batch_size] size.
+    """
+    # Create a queue that shuffles the examples, and then
+    # read 'batch_size' images + labels from the example queue.
+    num_preprocess_threads = 16
+    if shuffle:
+        images, labels = tf.train.shuffle_batch(
+            [image, label],
+            batch_size=batch_size,
+            num_threads=num_preprocess_threads,
+            capacity=min_queue_examples + 3 * batch_size,
+            min_after_dequeue=int(min_queue_examples))
+    else:
+        images, labels = tf.train.batch(
+            [image, label],
+            batch_size=batch_size,
+            num_threads=num_preprocess_threads,
+            capacity=min_queue_examples + 3 * batch_size)
+    return images, labels
+
+
 
